@@ -1,0 +1,72 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Design.Height="300" Design.Width="600">
+  <Grid Background="#333333" ColumnDefinitions="1*,1*" Margin="5">
+    <Grid Grid.Column="0">
+      <StackPanel>
+        <TextBlock Text="HTTP API server" FontSize="16" Foreground="#F5F5F5" />
+        <Grid Margin="0,10,0,20">
+          <TextBlock Name="ApiPortBlock" VerticalAlignment="Center" FontSize="14" Text="Port:" Foreground="#F5F5F5"  />
+          <TextBox Margin="40,0,0,0" Width="45" HorizontalAlignment="Left" />
+          <Button Content="Start" Name="APIStart" Margin="100,0,0,0" Width="75" HorizontalAlignment="Left" />
+        </Grid>
+        <Grid ColumnDefinitions="125,1*">
+            <StackPanel Grid.Column="0">
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="Status:" Foreground="#F5F5F5" />
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="IP Address:" Foreground="#F5F5F5" />
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="Port:" Foreground="#F5F5F5" />
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="Total requests:" Foreground="#F5F5F5" />
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="Data send:" Foreground="#F5F5F5" />
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="Data recieved:" Foreground="#F5F5F5" />
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="Last request IP:" Foreground="#F5F5F5" />
+              <TextBlock VerticalAlignment="Center" FontSize="14" Text="Last request time:" Foreground="#F5F5F5" />
+            </StackPanel>
+          <StackPanel Grid.Column="1">
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiStat" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiIp" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiPort" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiTotal" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiSend" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiRecieved" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiLastIp" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="ApiLastTime" Foreground="#F5F5F5" />
+          </StackPanel>
+        </Grid>
+      </StackPanel>
+    </Grid>
+    
+    
+    <Grid Grid.Column="1">
+      <StackPanel>
+        <TextBlock Text="HTTP File server" FontSize="16" Foreground="#F5F5F5" />
+        <Grid Margin="0,10,0,20">
+          <TextBlock Name="FilePortBlock" VerticalAlignment="Center" FontSize="14" Text="Port:" Foreground="#F5F5F5"  />
+          <TextBox Margin="40,0,0,0" Width="45" HorizontalAlignment="Left" />
+          <Button Content="Start" Name="FileStart" Margin="100,0,0,0" Width="75" HorizontalAlignment="Left" />
+        </Grid>
+        <Grid ColumnDefinitions="125,1*">
+          <StackPanel Grid.Column="0">
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="Status:" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="IP Address:" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="Port:" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="Active connections:" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="Data speed: " Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="Total data send: " Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="Last request IP:" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text="Last request time:" Foreground="#F5F5F5" />
+          </StackPanel>
+          <StackPanel Grid.Column="1">
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FileStat" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FileIp" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FilePort" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FileActive" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FileSpeed" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FileSend" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FileLastIp" Foreground="#F5F5F5" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Name="FileLastTime" Foreground="#F5F5F5" />
+          </StackPanel>
+        </Grid>
+      </StackPanel>
+    </Grid>
+  </Grid>
+</UserControl>
