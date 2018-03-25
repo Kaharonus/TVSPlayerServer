@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HttpListener = System.Net.Http.HttpListener;
 using NETStandard.HttpListener;
+using System.Text.RegularExpressions;
 
 namespace TVSPlayerServer
 {
@@ -27,6 +28,8 @@ namespace TVSPlayerServer
 
         public void Stop() {
             Listener.Close();
+            ConsoleLog.WriteLine("API Stopped");
+
         }
 
         public void Start() {
@@ -35,6 +38,7 @@ namespace TVSPlayerServer
                 Listener.Request += (s, ev) => Listen(ev);
             }
             Listener.Start();
+            ConsoleLog.WriteLine("API Started @ " + IP + ":" + Port);
         }
 
         public void Listen(HttpListenerRequestEventArgs context) {
@@ -42,7 +46,10 @@ namespace TVSPlayerServer
                 var request = context.Request;
                 var response = context.Response;
                 //Create auth methods
-                if (true) {
+                if (Regex.Match(request.Url.LocalPath, "/register/*").Success && request.HttpMethod == HttpMethods.Post) {
+                    Auth.RegisterUser(request, response);
+                }
+                if (Auth.IsAuthorized(request)) {
                     if (request.HttpMethod == HttpMethod.Get.Method) {                      
                         ConsoleLog.WriteLine("GET Request recieved from " + request.RemoteEndpoint.Address.ToString());
                     } else if (request.HttpMethod == HttpMethod.Post.Method) {

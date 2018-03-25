@@ -1,0 +1,16 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Design.Height="480"
+             Design.Width="800"
+             >
+  <Grid RowDefinitions="1*,1*,1*" ColumnDefinitions="1*,2*,1*" Background="#AA000000">
+    <Grid Row="1" Column="1"  Background="#333333">
+      <StackPanel  Margin="10">
+        <TextBlock Name="NewIP" Foreground="#F5F5F5" FontSize="16">New user from IP:</TextBlock>
+        <TextBlock Foreground="#F5F5F5" FontSize="16"></TextBlock>
+
+      </StackPanel>
+    </Grid>
+
+  </Grid>
+</UserControl>

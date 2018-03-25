@@ -15,14 +15,19 @@
   <ItemGroup>
     <None Remove="Configuration.xaml" />
     <None Remove="Info.xaml" />
+    <None Remove="Views\AuthEnter.xaml" />
     <None Remove="Views\Torrents.xaml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.6.1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.6.1" />
     <PackageReference Include="NETStandard.HttpListener" Version="1.0.3.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Views\AuthEnter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Info.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
