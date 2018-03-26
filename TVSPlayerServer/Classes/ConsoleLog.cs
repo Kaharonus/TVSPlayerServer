@@ -32,7 +32,7 @@ namespace TVSPlayerServer
             t.Start();      
         }
 
-        private static void WriteLineGUI(string text, SolidColorBrush color = null) {
+        private static void WriteLineGUI(string text, ISolidColorBrush color = null) {
             if (Log != null) {
                 TextBlock block = new TextBlock {
                     Foreground = color == null ? Brushes.Black : color,
@@ -45,11 +45,11 @@ namespace TVSPlayerServer
             }
         }
 
-        public static void WriteLine(string text, SolidColorBrush color = null) {
+        public static void WriteLine(string text, ISolidColorBrush color = null) {
             text = DateTime.Now.ToString("HH:mm:ss yyyy/MM/dd") + ": " + text;
             WriteLineGUI(text, color);
             Console.WriteLine(text);
         }
-       
+
     }
 }

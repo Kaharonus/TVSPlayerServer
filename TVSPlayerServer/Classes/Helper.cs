@@ -42,6 +42,8 @@ namespace TVSPlayerServer
 
     }
     public static class Helper {
+
+
         public static string GetMyIP() {
             string localIP;
             using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
