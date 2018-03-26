@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia.Animation;
+using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,11 +21,19 @@ namespace TVSPlayerServer
         /// </summary>
         /// <param name="view"></param>
         public static void SetView(UserControl view) {
-            if (SwitchableContent.Children.Count > 0) {
-                var children = SwitchableContent.Children;
-                SwitchableContent.Children.RemoveAt(0);
-            }
-            SwitchableContent.Children.Add(view);
+            // Finish this later now it just fades out, I want it also to fade in. Also make some nice "Animations" class with a nice wrapper for this crap
+            var anim = Animate.Property(SwitchableContent, Grid.OpacityProperty, 1, 0, new LinearDoubleEasing(), new TimeSpan(0, 0, 0, 0, 300));
+            var how = anim.Subscribe((double value) => {
+                if (value == 0) {
+                    if (SwitchableContent.Children.Count > 0) {
+                        var children = SwitchableContent.Children;
+                        SwitchableContent.Children.RemoveAt(0);
+                    }
+                    SwitchableContent.Children.Add(view);
+                }       
+           });
+          
+           
         }
 
         /// <summary>

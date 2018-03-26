@@ -46,10 +46,11 @@ namespace TVSPlayerServer
                 var request = context.Request;
                 var response = context.Response;
                 //Create auth methods
-                if (Regex.Match(request.Url.LocalPath, "/register/*").Success && request.HttpMethod == HttpMethods.Post) {
+                if (Regex.Match(request.Url.LocalPath, "/register/?").Success && request.HttpMethod == HttpMethods.Post) {
                     Auth.RegisterUser(request, response);
-                }
-                if (Auth.IsAuthorized(request)) {
+                } else if (Regex.Match(request.Url.LocalPath, "/login/?").Success && request.HttpMethod == HttpMethods.Post) {
+                    Auth.LoginUser(request, response);
+                }else if (Auth.IsAuthorized(request)) {
                     if (request.HttpMethod == HttpMethod.Get.Method) {                      
                         ConsoleLog.WriteLine("GET Request recieved from " + request.RemoteEndpoint.Address.ToString());
                     } else if (request.HttpMethod == HttpMethod.Post.Method) {

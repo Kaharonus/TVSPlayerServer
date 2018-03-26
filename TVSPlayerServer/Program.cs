@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Logging.Serilog;
@@ -33,9 +34,9 @@ namespace TVSPlayerServer
         public static void TestMethod() {
             API api = new API(8080);
             api.Start();
-            Console.ReadKey();
+            Console.ReadLine();
         }
-  
+
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
