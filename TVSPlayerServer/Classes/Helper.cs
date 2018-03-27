@@ -69,9 +69,9 @@ namespace TVSPlayerServer
             return localIP;
         }
 
-        public static PhysicalAddress GetMacAddress(string ip) {
+        public static string GetMacAddress(string ip) {
             if (ip == GetMyIP()) {
-                return NetworkInterface.GetAllNetworkInterfaces().Single(x => x.GetIPProperties().UnicastAddresses.Where(y => y.Address.ToString() == ip).Count() > 0).GetPhysicalAddress();
+                return NetworkInterface.GetAllNetworkInterfaces().Single(x => x.GetIPProperties().UnicastAddresses.Where(y => y.Address.ToString() == ip).Count() > 0).GetPhysicalAddress().ToString();
             } else {
                 Process pProcess = new Process();
                 pProcess.StartInfo.FileName = "arp";
@@ -84,9 +84,9 @@ namespace TVSPlayerServer
                 string pattern = @"(?<ip>([0-9]{1,3}\.?){4})\s*(?<mac>([a-f0-9]{2}-?){6})";
                 var result = Regex.Matches(cmdOutput, pattern, RegexOptions.IgnoreCase).Cast<Match>().Where(x => x.Groups["ip"].Value == ip).FirstOrDefault();
                 if (result != null) {
-                    return PhysicalAddress.Parse(result.Groups["mac"].Value.ToUpper());
+                    return result.Groups["mac"].Value.ToUpper().Replace("-","");
                 } else {
-                    return PhysicalAddress.None;
+                    return "";
                 }
             }
            

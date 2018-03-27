@@ -14,21 +14,12 @@ namespace TVSPlayerServer
         public string Password { get; set; }
         public DateTime LastLogin { get; set; }
         public string LastLoginIP { get; set; }
-        List<UserDevice> Devices { get; set; } = new List<UserDevice>();
+        public List<UserDevice> Devices { get; set; } = new List<UserDevice>();
 
         [JsonConstructor]
         public User() { }
 
         public User(string userName, string password) {
-            var users = GetUsers();
-            Random rnd = new Random();
-            short random = 0;
-            while (true) {
-                random = (short)rnd.Next(short.MaxValue);
-                if (users.Where(x => x.Id == random).Count() == 0 && random>0)
-                    break;
-            }
-            Id = random;
             UserName = userName;
             SetPassword(password);
         }
@@ -45,6 +36,10 @@ namespace TVSPlayerServer
             Devices.Add(UserDevice.Create(this,ipAddress));
         }
 
+        public UserDevice GetDevice(string macAddress) {
+            return Devices.Where(x => x.MacAddress == macAddress).FirstOrDefault();
+        }
+
         #region Static Methods
 
         public static User GetUser(short id) {
@@ -56,7 +51,7 @@ namespace TVSPlayerServer
         }
 
         public static User GetUserByToken(string token) {
-            short id = Convert.ToInt16(token.Substring(token.Length - 2), 16);
+            short id = BitConverter.ToInt16(Convert.FromBase64String(token.Substring(60)), 0);
             return GetUser(id);
         }
 
@@ -66,7 +61,6 @@ namespace TVSPlayerServer
 
         public static void AddUser(User user) {
             var users = GetUsers();
-
             users.Add(user);
             DatabaseFiles.Write("Users", users);
         }
@@ -92,8 +86,8 @@ namespace TVSPlayerServer
 
         #endregion
 
-        class UserDevice {
-            public PhysicalAddress MacAddress { get; set; }
+        public class UserDevice {
+            public string MacAddress { get; set; }
             public string Token { get; set; }
             public static UserDevice Create(User user,string ip) {
                 return new UserDevice {
@@ -106,13 +100,13 @@ namespace TVSPlayerServer
                 var rnd = RandomNumberGenerator.Create();
                 string password = "";
                 char[] randomChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789!@$?_-".ToCharArray();
-                for (int i = 0; i < 30; i++) {
+                for (int i = 0; i < 60; i++) {
                     byte[] data = new byte[4];
                     rnd.GetBytes(data);
                     int generatedValue = Math.Abs(BitConverter.ToInt32(data, 0));
                     password += randomChars[generatedValue % randomChars.Length];
                 }
-                password += BitConverter.ToString(BitConverter.GetBytes(id));
+                password += Convert.ToBase64String(BitConverter.GetBytes(id));
                 return password;
             }
         }
