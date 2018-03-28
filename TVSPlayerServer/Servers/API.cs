@@ -50,7 +50,7 @@ namespace TVSPlayerServer
                     Auth.RegisterUser(request, response);
                 } else if (Regex.Match(request.Url.LocalPath, "/login/?").Success && request.HttpMethod == HttpMethods.Post) {
                     Auth.LoginUser(request, response);
-                }else if (Auth.IsAuthorized(request)) {
+                }else if (Auth.IsAuthorized(request, out User user)) {
                     if (request.HttpMethod == HttpMethod.Get.Method) {                      
                         ConsoleLog.WriteLine("GET Request recieved from " + request.RemoteEndpoint.Address.ToString());
                     } else if (request.HttpMethod == HttpMethod.Post.Method) {

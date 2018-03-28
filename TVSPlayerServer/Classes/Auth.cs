@@ -14,13 +14,34 @@ using System.Web;
 namespace TVSPlayerServer
 {
     static class Auth {
-        public static bool IsAuthorized(HttpListenerRequest request) {
-            if (request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetwork || request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetworkV6) {         
-                return false;
-            } else {
-                return true;
+        public static bool IsAuthorized(HttpListenerRequest request, out User user) {
+            if (IsRequestLocal(request)) {
+                var ip = request.RemoteEndpoint.Address.ToString();
+                var token = GetToken(request);
+                if (token != null) {
+                    var usr = User.GetUserByToken(token);
+                    var device = usr?.Devices.Where(x => x.Token == token).FirstOrDefault();
+                    if (device != null) {
+                        if ((Settings.SecurityLevel == 1 && usr.LastLogin > DateTime.Now.AddHours(-1)) || Settings.SecurityLevel == 2) {
+                            if (device.MacAddress == Helper.GetMacAddress(ip)) {
+                                user = EditUser(usr, ip);
+                                return true;
+                            }
+                        } else {
+                            user = EditUser(usr, ip);
+                            return true;
+                        }
+                    }
+                }
             }
+            if (Settings.LoggingLevel == 2) {
+                ConsoleLog.WriteLine("Request was not authorized from " + request.RemoteEndpoint.Address);
+            }
+            user = null;
+            return false;
+
         }
+
 
         public static void RegisterUser(HttpListenerRequest request, HttpListenerResponse response) {
             var users = User.GetUsers();
@@ -47,6 +68,13 @@ namespace TVSPlayerServer
             } else if (Settings.LoggingLevel == 2) {
                 ConsoleLog.WriteLine("Unsuccessful register attempt from " + request.RemoteEndpoint.Address.ToString());
             }
+        }
+
+        private static User EditUser(User usr, string ip) {
+            usr.LastLogin = DateTime.Now;
+            usr.LastLoginIP = ip;
+            User.EditUser(usr);
+            return usr;
         }
 
         public static void LoginUser(HttpListenerRequest request, HttpListenerResponse response) {
@@ -86,6 +114,20 @@ namespace TVSPlayerServer
             return false;
         }
 
+        public static bool IsRequestLocal(HttpListenerRequest request) {
+            return (request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetwork || request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetworkV6);
+        }
+
+        private static string GetToken(HttpListenerRequest request) {
+            if (!request.Headers.ContainsKey("Token")) {
+                return null;
+            }
+            string token = request.Headers["Token"];
+            if (token.Length != 64) {
+                return null;
+            }
+            return token;
+        }
 
         private static UserRequest GetData(HttpListenerRequest request) {
             List<string> phrases = new List<string>() {
