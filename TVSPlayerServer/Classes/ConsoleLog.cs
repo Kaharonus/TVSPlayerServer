@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace TVSPlayerServer
@@ -48,7 +49,10 @@ namespace TVSPlayerServer
         public static void WriteLine(string text, ISolidColorBrush color = null) {
             text = DateTime.Now.ToString("HH:mm:ss yyyy/MM/dd") + ": " + text;
             WriteLineGUI(text, color);
-            Console.WriteLine(text);
+            Task.Run(() => {
+                Console.WriteLine(text);
+            });
+
         }
 
     }

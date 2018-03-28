@@ -5,10 +5,15 @@ using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace TVSPlayerServer
 {
     class User{
+
+        private static List<User> Users { get; set; } = new List<User>();
+
         public short Id { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -42,12 +47,16 @@ namespace TVSPlayerServer
 
         #region Static Methods
 
+        public async static void LoadUsers() {
+            Users = await DatabaseFiles.Read<List<User>>("Users");
+        }
+
         public static User GetUser(short id) {
-            return GetUsers().SingleOrDefault(x => x.Id == id);
+            return Users.FirstOrDefault(x => x.Id == id);
         }
 
         public static User GetUser(string username) {
-            return GetUsers().SingleOrDefault(x => x.UserName == username);
+            return Users.FirstOrDefault(x => x.UserName == username);
         }
 
         public static User GetUserByToken(string token) {
@@ -56,31 +65,28 @@ namespace TVSPlayerServer
         }
 
         public static List<User> GetUsers() {
-            return DatabaseFiles.Read<List<User>>("Users");
+            return Users;
         }
 
         public static void AddUser(User user) {
-            var users = GetUsers();
-            users.Add(user);
-            DatabaseFiles.Write("Users", users);
+            Users.Add(user);
+            DatabaseFiles.Write("Users", Users);
         }
 
         public static void EditUser(User user) {
-            var users = GetUsers();
-            var orig = users.SingleOrDefault(x => x.Id == user.Id);
+            var orig = Users.SingleOrDefault(x => x.Id == user.Id);
             if (orig != null) {
-                users.RemoveAll(x => x.Id == user.Id);
-                users.Add(user);
-                DatabaseFiles.Write("Users", users);
+                Users.RemoveAll(x => x.Id == user.Id);
+                Users.Add(user);
+                DatabaseFiles.Write("Users", Users);
             }
         }
 
         public static void DeleteUser(User user) {
-            var users = GetUsers();
-            var orig = users.SingleOrDefault(x => x.Id == user.Id);
+            var orig = Users.SingleOrDefault(x => x.Id == user.Id);
             if (orig != null) {
-                users.RemoveAll(x => x.Id == user.Id);
-                DatabaseFiles.Write("Users", users);
+                Users.RemoveAll(x => x.Id == user.Id);
+                DatabaseFiles.Write("Users", Users);
             }
         }
 

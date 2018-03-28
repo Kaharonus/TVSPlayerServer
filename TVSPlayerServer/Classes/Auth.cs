@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -14,12 +15,11 @@ namespace TVSPlayerServer
 {
     static class Auth {
         public static bool IsAuthorized(HttpListenerRequest request) {
-            /*if (request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetwork || request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetworkV6) {         
+            if (request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetwork || request.RemoteEndpoint.AddressFamily != AddressFamily.InterNetworkV6) {         
                 return false;
             } else {
                 return true;
-            }*/
-            return true;
+            }
         }
 
         public static void RegisterUser(HttpListenerRequest request, HttpListenerResponse response) {
@@ -31,6 +31,7 @@ namespace TVSPlayerServer
                 user.errorPhrase = "Username already in use";
             }
             if (!SendBadResponse(response, user)) {
+                ConsoleLog.WriteLine("Successful register attempt from " + request.RemoteEndpoint.Address.ToString());
                 User u = new User(user.username, user.password);
                 Random rnd = new Random();
                 short random = 0;
@@ -43,6 +44,8 @@ namespace TVSPlayerServer
                 u.AddDevice(request.RemoteEndpoint.Address.ToString());
                 User.AddUser(u);
                 SendTokenResponse(response, u.Devices[0].Token);
+            } else if (Settings.LoggingLevel == 2) {
+                ConsoleLog.WriteLine("Unsuccessful register attempt from " + request.RemoteEndpoint.Address.ToString());
             }
         }
 
@@ -50,6 +53,7 @@ namespace TVSPlayerServer
             string ip = request.RemoteEndpoint.Address.ToString();
             var user = GetData(request);
             if (!SendBadResponse(response, user)) {
+                ConsoleLog.WriteLine("Successful log in attempt from " + request.RemoteEndpoint.Address.ToString());
                 var newUser = User.GetUser(user.username);
                 var mac = Helper.GetMacAddress(ip);
                 var device = newUser.GetDevice(mac);
@@ -61,13 +65,15 @@ namespace TVSPlayerServer
                 } else {
                     SendTokenResponse(response, device.Token);
                 }
-
+            } else if(Settings.LoggingLevel == 2) {
+                ConsoleLog.WriteLine("Unsuccessful log in attempt from " + request.RemoteEndpoint.Address.ToString());
             }
         }
 
         private static void SendTokenResponse(HttpListenerResponse response, string token) {
             StreamWriter writer = new StreamWriter(response.OutputStream);
             writer.Write("{ \"token\": \"" + token + "\" }");
+            writer.Flush();
             response.StatusCode = 200;
         }
 

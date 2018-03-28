@@ -19,6 +19,7 @@ namespace TVSPlayerServer
                         break;
                 }
             }
+            User.LoadUsers();
             if (IsUIEnabeled) {
                 BuildAvaloniaApp().Start<MainWindow>();
             } else {
