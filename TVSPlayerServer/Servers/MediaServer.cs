@@ -228,15 +228,12 @@ namespace TVSPlayerServer {
             var client = ((IPEndPoint)Client.RemoteEndPoint).Address.ToString() + ":" + ((IPEndPoint)Client.RemoteEndPoint).Port;
             Clients.Add(client);
             this.TempClient = null;//Server is ready to recive more requests now
-            if (LastFileName != FileName) //Should use a lock here but i will risk it
-            {
                 if (!File.Exists(FileName)) { ClientCount--; Client.Close(); return; }
                 if (FS != null) FS.Close();
                 FileInfo FInfo = new FileInfo(FileName);
                 LastFileLength = FInfo.Length;
                 FS = new FileStream(FileName, FileMode.Open);
                 LastFileName = FileName;
-            }
             string Reply = ContentString(Range, ContentType, LastFileLength);
             Client.Send(UTF8Encoding.UTF8.GetBytes(Reply), SocketFlags.None);
             byte[] Buf = new byte[ChunkSize];
@@ -251,7 +248,11 @@ namespace TVSPlayerServer {
                 if (BytesSent + ChunkSize > LastFileLength)
                     ChunkSize = LastFileLength - BytesSent;
                 Buf = new byte[ByteToSend];
-                FS.Read(Buf, 0, Buf.Length);
+                try {
+                    FS.Read(Buf, 0, Buf.Length);
+                } catch (Exception e) {
+                    ConsoleLog.WriteLine(e.Message);
+                }
                 BytesSent += Buf.Length;
                 if (Client.Connected) {
                     try { Client.Send(Buf); Thread.Sleep(100); } catch { ByteToSend = 0; }//Force an exit}

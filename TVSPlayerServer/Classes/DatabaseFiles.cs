@@ -16,7 +16,7 @@ namespace TVSPlayerServer
         /// <summary>
         /// Directory of database. Ends with \\.
         /// </summary>
-        public static string Database { get; } = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\TVSPlayerServer\\";
+        public static string Database { get; } = ChooseDirectory();
 
         /// <summary>
         /// Reads and parses file to desired type. Return value can be anything just make sure its same as specified type
@@ -103,6 +103,16 @@ namespace TVSPlayerServer
 
         private static string ObjectToJson(object obj) {
             return JsonConvert.SerializeObject(obj);
+        }
+
+        public static string ChooseDirectory(){
+            string dir = "";
+            if (Environment.OSVersion.Platform == PlatformID.Unix){
+                dir = "/usr/local/TVSPlayerServer/";           
+            } else if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+                dir = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments) + "\\TVSPlayerServer\\";
+            }
+            return dir;    
         }
 
         public static void CreateDataDir() {

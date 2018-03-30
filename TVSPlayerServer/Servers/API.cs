@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using HttpListener = System.Net.Http.HttpListener;
 using NETStandard.HttpListener;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace TVSPlayerServer
 {
@@ -43,6 +44,8 @@ namespace TVSPlayerServer
 
         public void Listen(HttpListenerRequestEventArgs context) {
             Task.Run(async () => {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 var request = context.Request;
                 var response = context.Response;
                 //Create auth methods
@@ -51,17 +54,27 @@ namespace TVSPlayerServer
                 } else if (Regex.Match(request.Url.LocalPath, "/login/?").Success && request.HttpMethod == HttpMethods.Post) {
                     Auth.LoginUser(request, response);
                 }else if (Auth.IsAuthorized(request, out User user)) {
-                    if (request.HttpMethod == HttpMethod.Get.Method) {                      
-                        ConsoleLog.WriteLine("GET Request recieved from " + request.RemoteEndpoint.Address.ToString());
-                    } else if (request.HttpMethod == HttpMethod.Post.Method) {
-                        ConsoleLog.WriteLine("POST Request recieved from " + request.RemoteEndpoint.Address.ToString());
+                    var result = RequestParser.Parse(request, response, user);
+                    if (result != null) {
+                        if (request.HttpMethod == HttpMethod.Get.Method) {
+                            ConsoleLog.WriteLine("GET Request recieved from " + request.RemoteEndpoint.Address.ToString());
+                            StreamWriter writer = new StreamWriter(response.OutputStream);
+                            writer.Write(result);
+                            writer.Flush();
+                        } else if (request.HttpMethod == HttpMethod.Post.Method) {
+                            ConsoleLog.WriteLine("POST Request recieved from " + request.RemoteEndpoint.Address.ToString());
+                        } else {
+                            response.MethodNotAllowed();
+                        }
                     } else {
-                        response.MethodNotAllowed();
+                        response.NotFound();
                     }
                 } else {
                     response.Forbidden();
                 }
                 response.Close();
+                sw.Stop();
+                ConsoleLog.WriteLine(sw.ElapsedMilliseconds.ToString());
             });
         }        
 

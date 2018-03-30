@@ -10,9 +10,11 @@ using System.Threading;
 
 namespace TVSPlayerServer
 {
-    static class Settings{
+    static class Settings {
         private static int _SecurityLevel = 1;
         private static int _LoggingLevel = 1;
+        private static string _token;
+        private static DateTime _tokenTimestamp;
 
         /// <summary>
         /// Security level of application from 0 (least secure) to 2 (most secure)
@@ -26,13 +28,23 @@ namespace TVSPlayerServer
         /// </summary>
         public static int LoggingLevel { get { return _LoggingLevel; } set { _LoggingLevel = value; SaveSettings(); } }
 
+        /// <summary>
+        /// Token for logging in into TheTVDB API
+        /// </summary>
+        public static string Token { get => _token; set { _token = value; SaveSettings(); } }
+
+        /// <summary>
+        /// Date time that stores time when token was last retrieved
+        /// </summary>
+        public static DateTime TokenTimestamp { get => _tokenTimestamp; set { _tokenTimestamp = value; SaveSettings(); } }
+
 
         /// <summary>
         /// Saves Settings. Is called automatically whenever property value is changed
         /// </summary>
         public static void SaveSettings() {
             Type type = typeof(Settings);
-            string filename = DatabaseFiles.Database + "Settings.TVSPS";
+            string filename = DatabaseFiles.Database + "Settings.tvsps";
             DatabaseFiles.CreateDataDir();
             if (!File.Exists(filename)) {
                 File.Create(filename).Dispose();
