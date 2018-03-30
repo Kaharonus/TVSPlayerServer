@@ -44,8 +44,6 @@ namespace TVSPlayerServer
 
         public void Listen(HttpListenerRequestEventArgs context) {
             Task.Run(async () => {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
                 var request = context.Request;
                 var response = context.Response;
                 //Create auth methods
@@ -73,8 +71,6 @@ namespace TVSPlayerServer
                     response.Forbidden();
                 }
                 response.Close();
-                sw.Stop();
-                ConsoleLog.WriteLine(sw.ElapsedMilliseconds.ToString());
             });
         }        
 

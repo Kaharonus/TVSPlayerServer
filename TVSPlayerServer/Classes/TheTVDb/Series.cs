@@ -30,7 +30,7 @@ namespace TVSPlayerServer
         public int? SiteRatingCount { get; set; }
 
         public bool AutoDownload { get; set; }
-        //public Poster DefaultPoster { get; set; }
+        public Poster DefaultPoster { get; set; }
         public string LibraryPath { get; set; }
         public List<int> UserIds { get; set; } = new List<int>();
 
