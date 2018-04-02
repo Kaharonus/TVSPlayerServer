@@ -41,21 +41,21 @@ namespace TVSPlayerServer
         /// </summary>
         /// <param name="view"></param>
         public static void AddView(UserControl view) {
-
+            ContentOnTop.Children.Add(view);
         }
 
         /// <summary>
         /// Removes top-most view
         /// </summary>
         public static void RemoveView() {
-
+            ContentOnTop.Children.RemoveAt(ContentOnTop.Children.Count - 1);
         }
 
         /// <summary>
         /// Removes all views that are on top
         /// </summary>
         public static void RemoveAllViews() {
-
+            ContentOnTop.Children.Clear();
         }
     }
 }

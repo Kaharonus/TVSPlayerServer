@@ -14,6 +14,7 @@ namespace TVSPlayerServer.Views
 
         INameScope scope;
         Button FileStart;
+        Button APIStart;
 
         private void InitializeComponent()
         {
@@ -21,7 +22,8 @@ namespace TVSPlayerServer.Views
             scope = this.FindNameScope();
             FileStart = (Button)scope.Find("FileStart");
             FileStart.Click += (s, ev) => StartMediaServer();
-
+            APIStart = (Button)scope.Find("APIStart");
+            APIStart.Click += (s, ev) => StartAPIServer();
         }
 
         private void Loaded() {
@@ -38,6 +40,18 @@ namespace TVSPlayerServer.Views
             } else {
                 Servers.Media.Start();
                 FileStart.Content = "Stop";
+            }
+        }
+        private void StartAPIServer() {
+            if (Servers.Api == null) {
+                Servers.LoadApi(8080);
+            }
+            if (Servers.Api.IsRunning) {
+                Servers.Api.Stop();
+                APIStart.Content = "Start";
+            } else {
+                Servers.Api.Start();
+                APIStart.Content = "Stop";
             }
         }
     }

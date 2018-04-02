@@ -29,6 +29,6 @@
         <StackPanel Name="ConsoleLog" Margin="5,0,0,0" />
       </ScrollViewer>
     </Grid>
-    <Grid Name="ContentOnTop" ZIndex="10"></Grid>
+    <Grid Name="ContentOnTop" ZIndex="10" Grid.RowSpan="2"></Grid>
   </Grid>
 </Window>

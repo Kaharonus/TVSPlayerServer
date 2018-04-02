@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using System;
 using TVSPlayerServer.Views;
 using System.Windows.Input;
+using TVSPlayerServer.Views.Setup;
 
 namespace TVSPlayerServer
 {
@@ -25,9 +26,14 @@ namespace TVSPlayerServer
             AvaloniaXamlLoader.Load(this);
             //Init. of few important things
             nameScope = this.FindNameScope();
+            Settings.Load();
             new View((Grid)nameScope.Find("SwitchableContent"), (Grid)nameScope.Find("ContentOnTop"));
             new ConsoleLog((StackPanel)nameScope.Find("ConsoleLog"), (ScrollViewer)nameScope.Find("Scroll"));
-            View.SetView(new Administration());
+            if (Settings.SetupComplete) {
+                View.SetView(new Administration());
+            } else {
+                View.AddView(new Welcome());
+            }
         }
 
         private void SetAdministration(object sender, RoutedEventArgs args) {

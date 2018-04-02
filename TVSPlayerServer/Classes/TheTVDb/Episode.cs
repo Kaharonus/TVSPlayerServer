@@ -31,8 +31,6 @@ namespace TVSPlayerServer
         public double SiteRating { get; set; }
         public int? SiteRatingCount { get; set; }
 
-        public long ContinueAt { get; set; }
-        public bool Finished { get; set; }
         public string Thumbnail { get; set; }
         public List<ScannedFile> Files { get; set; } = new List<ScannedFile>();
 
@@ -41,7 +39,9 @@ namespace TVSPlayerServer
             public FileType Type { get; set; }
             public string OriginalName { get; set; }
             public string NewName { get; set; }
-            public long? TimeStamp { get; set; }
+            public string Codec { get; set; }
+            public string Quality { get; set; }
+            public Dictionary<short, long> UserTimeStamps { get; set; } = new Dictionary<short, long>();
         }
 
         /// <summary>

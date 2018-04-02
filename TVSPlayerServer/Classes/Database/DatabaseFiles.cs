@@ -79,6 +79,7 @@ namespace TVSPlayerServer
             await Task.Run(() => {
                 path = Database + path + ".tvsps";
                 CreateDataDir();
+                if (!Directory.Exists(Path.GetDirectoryName(path))) Directory.CreateDirectory(Path.GetDirectoryName(path));
                 if (!File.Exists(path)) File.Create(path).Dispose();
                 string json = ObjectToJson(obj);
                 do {

@@ -14,6 +14,10 @@ namespace TVSPlayerServer
 {
     public static class Extentions {
 
+        public static void WaitAll(this IEnumerable<Task> tasks) {
+            Task.WaitAll(tasks.ToArray());
+        }
+
         public static string ChopOffBefore(this string s, string Before) {//Usefull function for chopping up strings
             int End = s.ToUpper().IndexOf(Before.ToUpper());
             if (End > -1) {
@@ -21,8 +25,6 @@ namespace TVSPlayerServer
             }
             return s;
         }
-
-
 
         public static string ChopOffAfter(this string s, string After) {//Usefull function for chopping up strings
             int End = s.ToUpper().IndexOf(After.ToUpper());

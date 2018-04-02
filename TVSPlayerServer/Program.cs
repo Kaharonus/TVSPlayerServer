@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Logging.Serilog;
+using TVSPlayerServer.Classes.Database;
 
 namespace TVSPlayerServer
 {
@@ -33,9 +34,9 @@ namespace TVSPlayerServer
 
 
         public static void TestMethod() {
-            API api = new API(8080);
+            var api = new MediaServer(8080,@"D:/");
             api.Start();
-            Console.ReadLine();
+            Console.ReadKey();
         }
 
 

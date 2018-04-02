@@ -47,9 +47,12 @@ namespace TVSPlayerServer
         }
 
         public static void WriteLine(string text, ISolidColorBrush color = null) {
-            text = DateTime.Now.ToString("HH:mm:ss yyyy/MM/dd") + ": " + text;
-            WriteLineGUI(text, color);
             Task.Run(() => {
+                text = DateTime.Now.ToString("HH:mm:ss yyyy/MM/dd") + ": " + text;
+                Dispatcher.UIThread.Post(() => {
+                    WriteLineGUI(text, color);
+                });
+
                 Console.WriteLine(text);
             });
 

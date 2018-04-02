@@ -15,6 +15,7 @@ namespace TVSPlayerServer
         private static int _LoggingLevel = 1;
         private static string _token;
         private static DateTime _tokenTimestamp;
+        private static bool _setupComplete = false;
 
         /// <summary>
         /// Security level of application from 0 (least secure) to 2 (most secure)
@@ -37,6 +38,11 @@ namespace TVSPlayerServer
         /// Date time that stores time when token was last retrieved
         /// </summary>
         public static DateTime TokenTimestamp { get => _tokenTimestamp; set { _tokenTimestamp = value; SaveSettings(); } }
+
+        /// <summary>
+        /// Indicates if user has already passed the entire setup process
+        /// </summary>
+        public static bool SetupComplete { get => _setupComplete; set { _setupComplete = value; SaveSettings(); } }
 
 
         /// <summary>

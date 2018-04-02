@@ -16,6 +16,7 @@
     <None Remove="Configuration.xaml" />
     <None Remove="Info.xaml" />
     <None Remove="Views\AuthEnter.xaml" />
+    <None Remove="Views\Setup\Welcome.xaml" />
     <None Remove="Views\Torrents.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +37,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Configuration.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Setup\Welcome.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Torrents.xaml">
