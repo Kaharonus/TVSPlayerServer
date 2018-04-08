@@ -14,8 +14,18 @@ namespace TVSPlayerServer
 {
     public static class Extentions {
 
-        public static void WaitAll(this IEnumerable<Task> tasks) {
-            Task.WaitAll(tasks.ToArray());
+        /// <summary>
+        /// Wait for all tasks to finish without blocking UI thread
+        /// </summary>
+        /// <param name="tasks">tasks to wait for</param>
+        public async static Task WaitAll(this IEnumerable<Task> tasks) {
+            await Task.Run(() => Task.WaitAll(tasks.ToArray()));       
+        }
+
+        public static void StartAll(this IEnumerable<Task> tasks) {
+            foreach (var task in tasks) {
+                task.Start();
+            }
         }
 
         public static string ChopOffBefore(this string s, string Before) {//Usefull function for chopping up strings

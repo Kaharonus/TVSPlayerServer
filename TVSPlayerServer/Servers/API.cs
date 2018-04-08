@@ -42,7 +42,7 @@ namespace TVSPlayerServer
         }
 
         public void Listen(HttpListenerRequestEventArgs context) {
-            Task.Run(async () => {
+            Task.Run(() => {
                 var request = context.Request;
                 var response = context.Response;
                 var match = Regex.Match(request.Url.LocalPath, "/register/?");
@@ -53,8 +53,8 @@ namespace TVSPlayerServer
                 } else if (Auth.IsAuthorized(request, out User user)) {
                     if (request.HttpMethod == HttpMethod.Get.Method) {
                         response = HandleGet(request, response, user);
-                    } else if (request.HttpMethod == HttpMethod.Post.Method) {
-                        response = HandlePost(request, response, user);
+                    } else if (request.HttpMethod == HttpMethod.Put.Method) {
+                        response = HandlePut(request, response, user);
                     } else {
                         response.MethodNotAllowed();
                     }
@@ -78,8 +78,8 @@ namespace TVSPlayerServer
             }
             return response;
         }
-        private static HttpListenerResponse HandlePost(HttpListenerRequest request, HttpListenerResponse response, User user) {
-            var result = RequestParser.ParsePost(request, user);
+        private static HttpListenerResponse HandlePut(HttpListenerRequest request, HttpListenerResponse response, User user) {
+            var result = RequestParser.ParsePut(request, user);
             if (result != null) {
                 StreamWriter writer = new StreamWriter(response.OutputStream);
                 writer.Write(result);

@@ -16,8 +16,8 @@ namespace TVSPlayerServer
             return RunMethod(request, user, methods);
         }
 
-        public static string ParsePost(HttpListenerRequest request, User user) {
-            var methods = GetMethods(typeof(PostMethods), request);
+        public static string ParsePut(HttpListenerRequest request, User user) {
+            var methods = GetMethods(typeof(PutMethods), request);
             return RunMethod(request, user, methods);
         }
 
@@ -26,9 +26,6 @@ namespace TVSPlayerServer
             foreach (var method in methods) {
                 var parameters = method.GetParameters().ToList();
                 parameters.RemoveAt(parameters.Count - 1);
-                if (request.HttpMethod == HttpMethods.Post) {
-                    parameters.RemoveAll(x => x.Name == "json");
-                }
                 if (parameters.Select(x => x.Name).All(query.Keys.Contains) && parameters.Count == query.Keys.Count) {
                     List<object> funcParams = new List<object>();
                     foreach (var param in parameters) {
@@ -36,17 +33,7 @@ namespace TVSPlayerServer
                             funcParams.Add(int.Parse(query[param.Name]));
                         } else {
                             funcParams.Add(query[param.Name]);
-                        }
-                    }
-                    if (request.HttpMethod == HttpMethods.Post) {
-                        if (request.InputStream != null) {
-                            StreamReader sr = new StreamReader(request.InputStream);
-                            string json = sr.ReadToEnd();
-                            funcParams.Add(GetObject(json));
-                        } else {
-                            funcParams.Add(null);
-                        }                        
-                    }
+                        }                    }                   
                     funcParams.Add(user);                   
                     var res = method.Invoke(new object(), funcParams.ToArray());
                     if (res != null) {

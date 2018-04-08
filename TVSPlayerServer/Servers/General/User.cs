@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace TVSPlayerServer
 {
@@ -47,8 +48,22 @@ namespace TVSPlayerServer
 
         #region Static Methods
 
-        public async static void LoadUsers() {
-            Users = await DatabaseFiles.Read<List<User>>("Users");
+        public async static Task LoadUsers() {
+            List<User> users = new List<User>();
+            string json = await DatabaseFiles.Read("Users");
+            /*try {
+                users = JsonConvert.DeserializeObject<List<User>>(json);
+            } catch (JsonSerializationException) {
+                if (File.Exists(path + ".tvspstemp")) {
+                    File.Delete(path + ".tvsps");
+                    File.Copy(path + ".tvspstemp", path + ".tvsps");
+                } else {
+                    ConsoleLog.WriteLine(ex.Message, Brushes.Red);
+                    ConsoleLog.WriteLine("File" + path + ".tvsps cannot be recovered", Brushes.Red);
+                    return new object();
+                }
+            }*/
+            Users = users;
         }
 
         public static User GetUser(short id) {

@@ -24,50 +24,32 @@ namespace TVSPlayerServer
         /// </summary>
         /// <typeparam name="T">Type you want returned</typeparam>
         /// <param name="path">Path to file in the Database directory. Without extension</param>
-        /// <returns></returns>
-        public async static Task<dynamic> Read<T>(string path) {
+        /// <returns></returns>      
+        public async static Task<string> Read(string path) {
             return await Task.Run(() => {
-                path = Database + path;
+                path = Database + path + ".tvsps";
+                if (!Directory.Exists(Path.GetDirectoryName(path))) {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+                }
+                bool exists = File.Exists(path);
+                if (!exists) {
+                    var fs = File.Create(path);
+                    fs.Dispose();
+                }
                 do {
                     try {
-                        string text = Read(path);
-                        var obj = JsonConvert.DeserializeObject(text, typeof(T));
-                        obj = obj ?? Activator.CreateInstance<T>();
-                        return obj;
-                    } catch (JsonSerializationException ex) {
-                        if (File.Exists(path + ".tvspstemp")) {
-                            File.Delete(path + ".tvsps");
-                            File.Copy(path + ".tvspstemp", path + ".tvsps");
-                        } else {
-                            ConsoleLog.WriteLine(ex.Message, Brushes.Red);
-                            ConsoleLog.WriteLine("File" + path + ".tvsps cannot be recovered", Brushes.Red);
-                            return new object();
+                        StreamReader sr = new StreamReader(path);
+                        string text = sr.ReadToEnd();
+                        sr.Close();
+                        return text;
+                    } catch (IOException e) {
+                        if (Settings.LoggingLevel == 2) {
+                            ConsoleLog.WriteLine(e.Message, Brushes.Red);
                         }
+                        Thread.Sleep(10);
                     }
                 } while (true);
-            });          
-        }
-
-        private static string Read(string path) {
-            path += ".tvsps";
-            CreateDataDir();
-            if (!File.Exists(path)) File.Create(path).Dispose();
-            do {
-                try {
-                    if (!Directory.Exists(Path.GetDirectoryName(path))) {
-                        Directory.CreateDirectory(Path.GetDirectoryName(path));
-                    }
-                    StreamReader sr = new StreamReader(path);
-                    string text = sr.ReadToEnd();
-                    sr.Close();
-                    return text;
-                } catch (IOException e) {
-                    if (Settings.LoggingLevel == 2) {
-                        ConsoleLog.WriteLine(e.Message, Brushes.Red);
-                    }
-                    Thread.Sleep(10);
-                }
-            } while (true);
+            });      
         }
 
         /// <summary>
@@ -78,10 +60,9 @@ namespace TVSPlayerServer
         public async static Task Write(string path, object obj) {
             await Task.Run(() => {
                 path = Database + path + ".tvsps";
-                CreateDataDir();
                 if (!Directory.Exists(Path.GetDirectoryName(path))) Directory.CreateDirectory(Path.GetDirectoryName(path));
                 if (!File.Exists(path)) File.Create(path).Dispose();
-                string json = ObjectToJson(obj);
+                string json = JsonConvert.SerializeObject(obj);
                 do {
                     try {
                         if (!Directory.Exists(Path.GetDirectoryName(path))) {
@@ -102,9 +83,6 @@ namespace TVSPlayerServer
             });          
         }
 
-        private static string ObjectToJson(object obj) {
-            return JsonConvert.SerializeObject(obj);
-        }
 
         public static string ChooseDirectory(){
             string dir = "";
@@ -114,19 +92,6 @@ namespace TVSPlayerServer
                 dir = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments) + "\\TVSPlayerServer\\";
             }
             return dir;    
-        }
-
-        public static void CreateDataDir() {
-            string dir = Database;
-            if (!Directory.Exists(dir)) {
-                Directory.CreateDirectory(dir);
-                if (Environment.OSVersion.Platform == PlatformID.Unix) {
-                    //Code to enable all user access on Unix platforms
-                } else if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-                    //Code to enable all user access on Win platforms
-                }
-            }
-            
-        }
+        }      
     }
 }

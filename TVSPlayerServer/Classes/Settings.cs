@@ -51,7 +51,9 @@ namespace TVSPlayerServer
         public static void SaveSettings() {
             Type type = typeof(Settings);
             string filename = DatabaseFiles.Database + "Settings.tvsps";
-            DatabaseFiles.CreateDataDir();
+            if (!Directory.Exists(DatabaseFiles.Database)) {
+                Directory.CreateDirectory(DatabaseFiles.Database);
+            }
             if (!File.Exists(filename)) {
                 File.Create(filename).Dispose();
             }
@@ -83,8 +85,10 @@ namespace TVSPlayerServer
         /// </summary>
         public static void Load() {
             Type type = typeof(Settings);
-            string filename = DatabaseFiles.Database + "Settings.TVSPS";
-            DatabaseFiles.CreateDataDir();
+            string filename = DatabaseFiles.Database + "Settings.tvsps";
+            if (!Directory.Exists(DatabaseFiles.Database)) {
+                Directory.CreateDirectory(DatabaseFiles.Database);
+            }
             if (!File.Exists(filename)) {
                 File.Create(filename).Dispose();
             }

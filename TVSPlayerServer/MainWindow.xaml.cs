@@ -21,8 +21,7 @@ namespace TVSPlayerServer
 
         INameScope nameScope;
 
-        private void InitializeComponent()
-        {
+        private void InitializeComponent(){
             AvaloniaXamlLoader.Load(this);
             //Init. of few important things
             nameScope = this.FindNameScope();
