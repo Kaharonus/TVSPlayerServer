@@ -2,10 +2,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <StartupObject></StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.0|AnyCPU'">
     <WarningLevel>4</WarningLevel>
+    <NoWarn />
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">

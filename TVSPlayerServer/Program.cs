@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Logging.Serilog;
 using TVSPlayerServer.Classes.Database;
@@ -11,13 +12,13 @@ namespace TVSPlayerServer
     {
         static bool IsUIEnabeled { get; set; } = false;
         static bool TestRun { get; set; } = true;
-        //public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug();
+        public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug();
 
-        static void Main(string[] args) {
-            AppDomain.CurrentDomain.UnhandledException += (s, ev) => Database.SaveDatabase();
+        static async Task Main(string[] args) {
+            //AppDomain.CurrentDomain.UnhandledException += (s, ev) => ExceptionCought(ev);
             AppDomain.CurrentDomain.ProcessExit += (s, ev) => Database.SaveDatabase();
             ParseLaunchParameters(args);
-            LoadData();
+            await LoadData();
         }
 
         private static void ParseLaunchParameters(string[] args) {
@@ -30,23 +31,33 @@ namespace TVSPlayerServer
             }
         }
 
-        private async static void LoadData() {
-            Settings.Load();
-            await User.LoadUsers();
-            await Database.LoadDatabase();
+        private async static Task LoadData() {           
             if (!TestRun) {
+                Settings.Load();
+                await User.LoadUsers();
+                await Database.LoadDatabase();
                 if (IsUIEnabeled) {
-                    //BuildAvaloniaApp().Start<MainWindow>();
+                    BuildAvaloniaApp().Start<MainWindow>();
                 } else {
-                    Console.WriteLine("Mode without GUI is not implemented yet. Press any key to exit");
-                    Console.ReadKey();
+                    Console.WriteLine("Mode without GUI is not implemented yet. Press any key to exit. Please don't close this app by the X sign");
+                    Console.ReadLine();
                 }
             } else {
-                TestMethod();
+                await TestMethod();
             }
         }
 
-        public static void TestMethod() {
+        private static void ExceptionCought(UnhandledExceptionEventArgs args) {
+            Database.SaveDatabase();
+            var ex = (Exception)args.ExceptionObject;
+            ConsoleLog.WriteLine(ex.Message);
+            ConsoleLog.WriteLine(ex.StackTrace);
+        }
+
+        public async static Task TestMethod() {
+            Settings.Load();
+            await User.LoadUsers();
+            await Database.LoadDatabase();
             API api = new API(8080);
             api.Start();
             Console.ReadKey();

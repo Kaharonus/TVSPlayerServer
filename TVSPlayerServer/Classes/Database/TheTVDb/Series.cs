@@ -29,9 +29,15 @@ namespace TVSPlayerServer
         public double SiteRating { get; set; }
         public int? SiteRatingCount { get; set; }
 
-        public bool AutoDownload { get; set; }
         public string LibraryPath { get; set; }
-        public List<int> UserIds { get; set; } = new List<int>();
+        public UserSettings userSettings { get; set; }
+        public List<UserSettings> AllUserSettings { get; set; } = new List<UserSettings>();
+
+        public class UserSettings {
+            public int UserId { get; set; }
+            public bool AutoDownload { get; set; } = false;
+            public int PosterId { get; set; }
+        }
 
         /// <summary>
         /// Searches TVMaze API for Series

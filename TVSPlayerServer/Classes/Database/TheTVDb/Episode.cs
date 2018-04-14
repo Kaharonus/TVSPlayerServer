@@ -31,18 +31,14 @@ namespace TVSPlayerServer
         public double SiteRating { get; set; }
         public int? SiteRatingCount { get; set; }
 
-        public long UserTimeStamp { get; set; }
-        public Dictionary<short, long> AllUserTimeStamp { get; set; } = new Dictionary<short, long>();
         public string ThumbnailPath { get; set; }
-        public List<ScannedFile> Files { get; set; } = new List<ScannedFile>();
+        public Dictionary<string, string> Files;
+        public UserSettings userSettings { get; set; }
+        public List<UserSettings> AllUserSettings { get; set; } = new List<UserSettings>();
 
-        public class ScannedFile {
-            public enum FileType { Video, Subtitles };
-            public FileType Type { get; set; }
-            public string OriginalName { get; set; }
-            public string NewName { get; set; }
-            public string Codec { get; set; }
-            public string Quality { get; set; }
+        public class UserSettings {
+            public int UserId { get; set; }
+            public long TimeStamp { get; set; }
         }
 
         /// <summary>

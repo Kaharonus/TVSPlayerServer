@@ -13,6 +13,7 @@ namespace TVSPlayerServer.Classes.Database
         public List<Episode> Episodes { get; set; } = new List<Episode>();
         public List<Poster> Posters { get; set; } = new List<Poster>();
         public List<Actor> Actors { get; set; } = new List<Actor>();
+        public List<FileInformation> Files { get; set; } = new List<FileInformation>();
 
         public static void AddItem(Database db) {
             Data.Add(db);
@@ -30,6 +31,15 @@ namespace TVSPlayerServer.Classes.Database
 
         public static List<Series> GetSeries() {
             return Data.Select(x => x.Series).ToList();
+        }
+
+        public static int GetDefaultPosterId(int seriesId) {
+            var data = Data.Where(x => x.Series.Id == seriesId).FirstOrDefault();
+            if (data.Posters.Count > 0) {
+                return data.Posters[0].Id;
+            } else {
+                return 0;
+            }
         }
 
 
@@ -50,30 +60,28 @@ namespace TVSPlayerServer.Classes.Database
         }
 
         public async static Task LoadDatabase() {
-            /*await Task.Run(async () => {
-                var series = await DatabaseFiles.Read<List<Series>>("Series");
-                foreach (var item in series) {
-                    Database db = new Database();
-                    db.Series = item;
-                    db.Episodes = await DatabaseFiles.Read<List<Episode>>(item.Id + "\\Episodes");
-                    db.Actors = await DatabaseFiles.Read<List<Actor>>(item.Id + "\\Actors");
-                    db.Posters = await DatabaseFiles.Read<List<Poster>>(item.Id + "\\Posters");
-                    Data.Add(db);
-                }
-            });*/
+            var series = (await DatabaseFiles.Read("Series")).ToObject<List<Series>>();
+            series = series ?? new List<Series>();
+            foreach (var item in (List<Series>)series) {
+                Database db = new Database();
+                db.Series = item;
+                db.Episodes = (await DatabaseFiles.Read(item.Id + "\\Episodes")).ToObject<List<Episode>>();
+                db.Actors = (await DatabaseFiles.Read(item.Id + "\\Actors")).ToObject<List<Actor>>();
+                db.Posters = (await DatabaseFiles.Read(item.Id + "\\Posters")).ToObject<List<Poster>>();
+                db.Files = (await DatabaseFiles.Read(item.Id + "\\Files")).ToObject<List<FileInformation>>();
+                Data.Add(db);
+            }
         }
 
-        public async static void SaveDatabase() {
+        public static void SaveDatabase() {
             var series = GetSeries();
-            await DatabaseFiles.Write("Series", series);
+            DatabaseFiles.Write("Series", series);
             foreach (var db in Data) {
-                Task[] tasks = new Task[] {
-                    DatabaseFiles.Write(db.Series.Id + "\\Episodes", db.Episodes),
-                    DatabaseFiles.Write(db.Series.Id + "\\Posters", db.Actors),
-                    DatabaseFiles.Write(db.Series.Id + "\\Actors", db.Posters),
-                };
-                tasks.StartAll();
-                await tasks.WaitAll();
+                DatabaseFiles.Write(db.Series.Id + "\\Episodes", db.Episodes);
+                DatabaseFiles.Write(db.Series.Id + "\\Posters", db.Posters);
+                DatabaseFiles.Write(db.Series.Id + "\\Actors", db.Actors);
+                DatabaseFiles.Write(db.Series.Id + "\\Files", db.Files);
+
             }
         }
     }

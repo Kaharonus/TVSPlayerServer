@@ -10,14 +10,18 @@ namespace TVSPlayerServer
 {
     class PutMethods {
 
-        public static string AddSeries(int seriesId,  User user) {
+
+        public static string AddSeries(int seriesId, User user) {
             var data = Database.Data.Where(x => x.Series.Id == seriesId).FirstOrDefault();
             if (data == null) {
                 var db = Database.CreateDatabase(seriesId).Result;
-                db.Series.UserIds.Add(user.Id);
                 Database.AddItem(db);
-            } else if(!data.Series.UserIds.Contains(user.Id)) {
-                data.Series.UserIds.Add(user.Id);
+                AddSeries(seriesId, user);
+            } else if(data.Series.AllUserSettings.Where(x=>x.UserId == user.Id).Count() == 0) {
+                data.Series.AllUserSettings.Add(new Series.UserSettings() {
+                    UserId = user.Id,
+                    PosterId = Database.GetDefaultPosterId(seriesId)
+                });
                 Database.EditItem(data);
             }
             return "Added";

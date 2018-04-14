@@ -81,18 +81,24 @@ namespace TVSPlayerServer
             string ip = request.RemoteEndpoint.Address.ToString();
             var user = GetData(request);
             if (!SendBadResponse(response, user)) {
-                ConsoleLog.WriteLine("Successful log in attempt from " + request.RemoteEndpoint.Address.ToString());
                 var newUser = User.GetUser(user.username);
-                var mac = Helper.GetMacAddress(ip);
-                var device = newUser.GetDevice(mac);
-                if (device == null) {
-                    newUser.AddDevice(ip);
-                    User.EditUser(newUser);
-                    device = newUser.GetDevice(mac);
-                    SendTokenResponse(response, device.Token);
+                if (GetHash(user.password) == newUser.Password) {
+                    ConsoleLog.WriteLine("Successful log in attempt from " + request.RemoteEndpoint.Address.ToString());
+                    var mac = Helper.GetMacAddress(ip);
+                    var device = newUser.GetDevice(mac);
+                    if (device == null) {
+                        newUser.AddDevice(ip);
+                        User.EditUser(newUser);
+                        device = newUser.GetDevice(mac);
+                        SendTokenResponse(response, device.Token);
+                    } else {
+                        SendTokenResponse(response, device.Token);
+                    }
                 } else {
-                    SendTokenResponse(response, device.Token);
-                }
+                    user.isValid = false;
+                    user.errorPhrase = "Bad password";
+                    SendBadResponse(response, user);
+                }            
             } else if(Settings.LoggingLevel == 2) {
                 ConsoleLog.WriteLine("Unsuccessful log in attempt from " + request.RemoteEndpoint.Address.ToString());
             }
@@ -100,7 +106,7 @@ namespace TVSPlayerServer
 
         private static void SendTokenResponse(HttpListenerResponse response, string token) {
             StreamWriter writer = new StreamWriter(response.OutputStream);
-            writer.Write("{ \"token\": \"" + token + "\" }");
+            writer.Write(token);
             writer.Flush();
             response.StatusCode = 200;
         }
@@ -153,6 +159,14 @@ namespace TVSPlayerServer
                 return new UserRequest(phrases[2]);
             }
             return parsed;
+        }
+
+        private static string GetHash(string text) {
+            using (SHA512 sha = SHA512.Create()) {
+                var hashedBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(text));
+                var hash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+                return hash;
+            }
         }
 
         private class UserRequest{

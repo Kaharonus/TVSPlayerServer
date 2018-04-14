@@ -49,21 +49,7 @@ namespace TVSPlayerServer
         #region Static Methods
 
         public async static Task LoadUsers() {
-            List<User> users = new List<User>();
-            string json = await DatabaseFiles.Read("Users");
-            /*try {
-                users = JsonConvert.DeserializeObject<List<User>>(json);
-            } catch (JsonSerializationException) {
-                if (File.Exists(path + ".tvspstemp")) {
-                    File.Delete(path + ".tvsps");
-                    File.Copy(path + ".tvspstemp", path + ".tvsps");
-                } else {
-                    ConsoleLog.WriteLine(ex.Message, Brushes.Red);
-                    ConsoleLog.WriteLine("File" + path + ".tvsps cannot be recovered", Brushes.Red);
-                    return new object();
-                }
-            }*/
-            Users = users;
+            Users = (await DatabaseFiles.Read("Users")).ToObject<List<User>>();
         }
 
         public static User GetUser(short id) {
