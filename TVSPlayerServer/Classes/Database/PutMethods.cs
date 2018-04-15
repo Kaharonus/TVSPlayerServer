@@ -10,7 +10,6 @@ namespace TVSPlayerServer
 {
     class PutMethods {
 
-
         public static string AddSeries(int seriesId, User user) {
             var data = Database.Data.Where(x => x.Series.Id == seriesId).FirstOrDefault();
             if (data == null) {

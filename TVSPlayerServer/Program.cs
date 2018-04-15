@@ -10,8 +10,8 @@ namespace TVSPlayerServer
 {
     class Program
     {
-        static bool IsUIEnabeled { get; set; } = false;
-        static bool TestRun { get; set; } = true;
+        static bool IsUIEnabeled { get; set; } = true;
+        static bool TestRun { get; set; } = false;
         public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug();
 
         static async Task Main(string[] args) {

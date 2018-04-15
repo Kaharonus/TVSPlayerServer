@@ -14,6 +14,11 @@ namespace TVSPlayerServer
         private static int _SecurityLevel = 1;
         private static int _LoggingLevel = 1;
         private static string _token;
+        private static string _libraryLocation;
+        private static string _downloadLocation;
+        private static string _scanLocation1;
+        private static string _scanLocation2;
+        private static string _scanLocation3;
         private static DateTime _tokenTimestamp;
         private static bool _setupComplete = false;
 
@@ -43,6 +48,33 @@ namespace TVSPlayerServer
         /// Indicates if user has already passed the entire setup process
         /// </summary>
         public static bool SetupComplete { get => _setupComplete; set { _setupComplete = value; SaveSettings(); } }
+
+        /// <summary>
+        /// Location of library. All files like episodes and subtitles are stored here
+        /// </summary>
+        public static string LibraryLocation { get => _libraryLocation; set { _libraryLocation = value; SaveSettings(); } }
+
+        /// <summary>
+        /// Location of cache for torrent downloading. While something gets downloaded it gets stored here
+        /// </summary>
+        public static string DownloadLocation { get => _downloadLocation; set { _downloadLocation = value; SaveSettings(); } }
+
+        /// <summary>
+        /// Extra folder that will be scanned for episodes and subtitles
+        /// </summary>
+        public static string ScanLocation1 { get => _scanLocation1; set { _scanLocation1 = value; SaveSettings(); } }
+
+        /// <summary>
+        /// Extra folder that will be scanned for episodes and subtitles
+        /// </summary>
+        public static string ScanLocation2 { get => _scanLocation2; set { _scanLocation2 = value; SaveSettings(); } }
+
+        /// <summary>
+        /// Extra folder that will be scanned for episodes and subtitles
+        /// </summary>
+        public static string ScanLocation3 { get => _scanLocation3; set { _scanLocation3 = value; SaveSettings(); } }
+
+
 
 
         /// <summary>
