@@ -16,16 +16,15 @@
             <Button Click="SetAdministration"  Content="Administration" Margin="5,0,0,0"></Button>
             <Button Click="SetConfiguration" Content="Configuration" Margin="5,0,0,0"></Button>
             <Button Click="SetTorrents" Content="Torrent &amp; Renamer" Margin="5,0,0,0"></Button>
-
-            <Button Content="Info &amp; Help" Margin="5,0,0,0"></Button>
+            <Button Content="Info &amp; Help" Click="SetInfo" Margin="5,0,0,0"></Button>
           </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Name="SwitchableContent" Margin="0,5,0,0" />     
-        <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="2" Background="#AAAAAA"></Grid>
+        <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="2" Background="#444444"></Grid>
       </Grid>
     </Grid>
     <Grid Grid.Row="1">
-      <ScrollViewer Name="Scroll" Background="#AAAAAA"  VerticalScrollBarVisibility="Visible" Margin="5,5,5,5">
+      <ScrollViewer Name="Scroll" Classes="Dark"  VerticalScrollBarVisibility="Visible" Margin="5,5,5,5">
         <StackPanel Name="ConsoleLog" Margin="5,0,0,0" />
       </ScrollViewer>
     </Grid>

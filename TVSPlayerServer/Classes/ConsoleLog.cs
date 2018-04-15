@@ -16,6 +16,7 @@ namespace TVSPlayerServer
         public static ScrollViewer ScrollView { get; set; }
         private static Timer t = new Timer(500);
         private static bool scrollDown = false;
+        private static IBrush CustomWhite = Brush.Parse("#F5F5F5");
     
         public ConsoleLog(StackPanel log, ScrollViewer viewer) {
             Log = log;
@@ -36,7 +37,7 @@ namespace TVSPlayerServer
         private static void WriteLineGUI(string text, ISolidColorBrush color = null) {
             if (Log != null) {
                 TextBlock block = new TextBlock {
-                    Foreground = color == null ? Brushes.Black : color,
+                    Foreground = color == null ? CustomWhite : color,
                     TextWrapping = TextWrapping.Wrap,
                     FontSize = 14
                 };

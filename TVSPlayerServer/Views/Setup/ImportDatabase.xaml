@@ -1,0 +1,13 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Design.Height="480" Design.Width="800" Name="ImportDatabase" Background="#333333">
+  <Grid RowDefinitions="60,1*,30" Margin="10">
+      <StackPanel Grid.Row="0">
+        <TextBlock Text="Import location" FontSize="16" Margin="0,0,0,5" HorizontalAlignment="Center" Foreground="#F5F5F5"></TextBlock>
+        <TextBox Name="ImportInput" FontSize="14" ToolTip.Tip="Double click to select" />
+      </StackPanel>
+    <ScrollViewer Grid.Row="1"  Classes="Dark">
+      <StackPanel Margin="5" Name="ResultPanel"></StackPanel>
+    </ScrollViewer>
+    <Button Grid.Row="2" HorizontalAlignment="Right" VerticalContentAlignment="Bottom" Content="Continue"></Button>
+  </Grid>
+</UserControl>

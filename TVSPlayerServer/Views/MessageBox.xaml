@@ -5,11 +5,11 @@
              >
   <Grid RowDefinitions="1*,1*,1*" ColumnDefinitions="1*,2*,1*" Background="#AA000000">
     <Grid Row="1" Column="1"  Background="#333333">
-      <StackPanel  Margin="10">
-        <TextBlock Name="NewIP" Foreground="#F5F5F5" FontSize="16">New user from IP:</TextBlock>
-        <TextBlock Foreground="#F5F5F5" FontSize="16"></TextBlock>
-
-      </StackPanel>
+      <Grid  Margin="10">
+        <TextBlock Name="Header" Foreground="#F5F5F5" FontSize="16"></TextBlock>
+        <TextBlock Name="Body" Foreground="#F5F5F5" FontSize="14" Margin="0,25,0,35" TextWrapping="Wrap"></TextBlock>
+          <Button Name="Cancel" Content="Cancel" VerticalAlignment="Bottom" HorizontalAlignment="Right"></Button>
+      </Grid>
     </Grid>
 
   </Grid>

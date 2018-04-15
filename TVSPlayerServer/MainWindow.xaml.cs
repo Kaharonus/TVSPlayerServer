@@ -6,6 +6,7 @@ using System;
 using TVSPlayerServer.Views;
 using System.Windows.Input;
 using TVSPlayerServer.Views.Setup;
+using Avalonia.Styling;
 
 namespace TVSPlayerServer
 {
@@ -28,24 +29,23 @@ namespace TVSPlayerServer
             Settings.Load();
             new View((Grid)nameScope.Find("SwitchableContent"), (Grid)nameScope.Find("ContentOnTop"));
             new ConsoleLog((StackPanel)nameScope.Find("ConsoleLog"), (ScrollViewer)nameScope.Find("Scroll"));
+            View.SetView(new Administration());
             if (Settings.SetupComplete) {
-                View.SetView(new Administration());
-            } else {
                 View.AddView(new Welcome());
             }
         }
 
         private void SetAdministration(object sender, RoutedEventArgs args) {
-            var admin = new Administration();
-            View.SetView(admin);
+            View.SetView(new Administration());
         }
         private void SetConfiguration(object sender, RoutedEventArgs args) {
-            var conf = new Configuration();
-            View.SetView(conf);
+            View.SetView(new Configuration());
         }
         private void SetTorrents(object sender, RoutedEventArgs args) {
-            var conf = new Torrents();
-            View.SetView(conf);
+            View.SetView(new Torrents());
+        }
+        private async void SetInfo(object sender, RoutedEventArgs args) {
+            await MessageBox.Show("Error", "You just created this superb bullcrap of a messagebox");
         }
     }
 }

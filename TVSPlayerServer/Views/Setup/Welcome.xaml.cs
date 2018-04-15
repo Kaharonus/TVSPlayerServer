@@ -4,7 +4,10 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace TVSPlayerServer.Views.Setup
 {
@@ -52,10 +55,53 @@ namespace TVSPlayerServer.Views.Setup
         }
 
         private async void ImportHandler(object sender, RoutedEventArgs e) {
-            
+            if (CheckDirectories()) {
+                SaveSettings();
+                View.AddView(new ImportDatabase());
+            } else {
+                await MessageBox.Show("Error", "You didn't enter correct data. \nPlease check the following:\nAll directories must be unique\nLibrary location must not be empty.");
+            }
         }
         private async void FinishHandler(object sender, RoutedEventArgs e) {
+            if (CheckDirectories()) {
+                SaveSettings();
+                Settings.SetupComplete = true;
+                View.RemoveAllViews();
+            } else {
+                await MessageBox.Show("Error", "You didn't enter correct data.\n\nPlease check the following:\n- All directories must be unique\n- Library location must not be empty.");
+            }
+        }
 
+        private void SaveSettings() {
+            Settings.DownloadLocation = DownloadInput.Text;
+            Settings.LibraryLocation = DirectoryInput.Text;
+            Settings.ScanLocation1 = ExtraInput1.Text;
+            Settings.ScanLocation2 = ExtraInput2.Text;
+            Settings.ScanLocation3 = ExtraInput3.Text;
+        }
+
+        private bool CheckDirectories() {
+            List<string> locations = new List<string>() {
+                DirectoryInput.Text, DownloadInput.Text, ExtraInput1.Text, ExtraInput2.Text, ExtraInput3.Text
+            };
+            if (String.IsNullOrEmpty(DirectoryInput.Text)) {
+                return false;
+            }
+            locations.Where(x => String.IsNullOrEmpty(x)).ToList().ForEach(x=> locations.Remove(x));
+            foreach (var dir in locations) {
+                if (!Directory.Exists(dir)) {
+                    return false;
+                }
+            }
+            for (int i = 0; i < locations.Count; i++) {
+                for (int x = i + 1; x < locations.Count; x++) {
+                    if ( locations[x] == locations[i]) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private async void Handler(object sender, RoutedEventArgs e) {

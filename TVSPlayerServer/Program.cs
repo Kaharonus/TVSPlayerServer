@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Logging.Serilog;
 using TVSPlayerServer.Classes.Database;
+using TVSPlayerServer.Views;
 
 namespace TVSPlayerServer
 {
@@ -15,7 +16,7 @@ namespace TVSPlayerServer
         public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug();
 
         static async Task Main(string[] args) {
-            //AppDomain.CurrentDomain.UnhandledException += (s, ev) => ExceptionCought(ev);
+            //AppDomain.CurrentDomain.UnhandledException += async (s, ev) => await ExceptionCought(ev);
             AppDomain.CurrentDomain.ProcessExit += (s, ev) => Database.SaveDatabase();
             ParseLaunchParameters(args);
             await LoadData();
@@ -47,9 +48,12 @@ namespace TVSPlayerServer
             }
         }
 
-        private static void ExceptionCought(UnhandledExceptionEventArgs args) {
+        private async static Task ExceptionCought(UnhandledExceptionEventArgs args) {
             Database.SaveDatabase();
             var ex = (Exception)args.ExceptionObject;
+            if (IsUIEnabeled) {
+                await MessageBox.Show("Uncought exception thrown", ex.Message);
+            }
             ConsoleLog.WriteLine(ex.Message);
             ConsoleLog.WriteLine(ex.StackTrace);
         }
