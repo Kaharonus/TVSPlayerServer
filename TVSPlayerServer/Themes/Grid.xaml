@@ -1,0 +1,8 @@
+﻿<Styles xmlns="https://github.com/avaloniaui">
+    <Style Selector="Grid.LightMouseOver:pointerover">
+        <Setter Property="Grid.Background" Value="#444444"></Setter>
+    </Style>
+  <Style Selector="Grid.LightMouseOver">
+    <Setter Property="Grid.Background" Value="#333333"></Setter>
+  </Style>
+</Styles>

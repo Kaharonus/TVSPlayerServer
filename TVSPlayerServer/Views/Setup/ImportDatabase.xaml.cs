@@ -15,6 +15,7 @@ namespace TVSPlayerServer.Views.Setup {
 
         INameScope nameScope;
         TextBox ImportInput;
+        Button Return;
         StackPanel ResultPanel;
 
         private void InitializeComponent(){
@@ -22,13 +23,17 @@ namespace TVSPlayerServer.Views.Setup {
             nameScope = this.FindNameScope();
             ImportInput = (TextBox)nameScope.Find("ImportInput");
             ResultPanel = (StackPanel)nameScope.Find("ResultPanel");
+            Return = (Button)nameScope.Find("Return");
+            Return.Click += (s, ev) => View.RemoveView();
             ImportInput.TextInput += (s, ev) => LoadDirectory();
-            ImportInput.DoubleTapped += async (s, ev) => {
-                OpenFolderDialog ofd = new OpenFolderDialog();
-                var res = await ofd.ShowAsync();
-                if (!String.IsNullOrEmpty(res)) {
-                    ImportInput.Text = res;
-                    LoadDirectory();
+            ImportInput.PointerReleased += async (s, ev) => {
+                if (ev.MouseButton == Avalonia.Input.MouseButton.Right) { 
+                    OpenFolderDialog ofd = new OpenFolderDialog();
+                    var res = await ofd.ShowAsync();
+                    if (!String.IsNullOrEmpty(res)) {
+                        ImportInput.Text = res;
+                        LoadDirectory();
+                }
                 }
             };
         }
@@ -36,6 +41,7 @@ namespace TVSPlayerServer.Views.Setup {
         private async void LoadDirectory() {
             var text = ImportInput.Text;
             if (!String.IsNullOrEmpty(text) && Directory.Exists(text)) {
+                ResultPanel.Focus();
                 ResultPanel.Children.Clear();
                 await Task.Run(() => {
                     var dirs = Directory.GetDirectories(text);
@@ -43,15 +49,13 @@ namespace TVSPlayerServer.Views.Setup {
                         var ser = Series.SearchSingle(Path.GetFileName(dir));
                         if (ser != null) {
                             Dispatcher.UIThread.Post(async () => {
-                                TextBlock block = new TextBlock();
-                                block.Foreground = Brushes.White;
-                                block.Text = "Name: " + ser.SeriesName + ", ID: " + ser.Id + ", Location: " + dir;
-                                block.Height = 45;
-                                block.FontSize = 16;
-                                block.Opacity = 0;
-                                ResultPanel.Children.Add(block);
-                                await Task.Delay(25);
-                                Anim.FadeIn(block);
+                                var result = new ImportResult(ser,dir);
+                                result.Remove.Click += async (s, ev) =>  {
+                                    await Anim.FadeOut(result);
+                                    ResultPanel.Children.Remove(result);
+                                };
+                                ResultPanel.Children.Add(result);
+                                Anim.FadeIn(result);
                             });
                         }
 

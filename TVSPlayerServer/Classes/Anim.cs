@@ -22,6 +22,7 @@ namespace TVSPlayerServer
         private async static Task WaitForFinish(IControl control, StyledProperty<double> property, double fromValue, double toValue, Action finished) {
             bool canFinish = false;
             Dispatcher.UIThread.Post(() => control.SetValue(property, fromValue));
+            await Task.Delay(25);
             Animation<double> anim = Animate.Property(control, property, fromValue, toValue, new LinearDoubleEasing(), new TimeSpan(0, 0, 0, 0, 200));
             var sub = anim.Subscribe((double value) => {
                 if (value == toValue) {

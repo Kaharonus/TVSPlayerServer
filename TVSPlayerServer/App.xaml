@@ -5,6 +5,7 @@
         <StyleInclude Source="resm:Avalonia.Themes.Default.Accents.BaseLight.xaml?assembly=Avalonia.Themes.Default"/>
         <StyleInclude Source="resm:TVSPlayerServer.Themes.ScrollBar.xaml?assembly=TVSPlayerServer"/>
         <StyleInclude Source="resm:TVSPlayerServer.Themes.ScrollViewer.xaml?assembly=TVSPlayerServer"/>
+        <StyleInclude Source="resm:TVSPlayerServer.Themes.Grid.xaml?assembly=TVSPlayerServer"/>
 
     </Application.Styles>
 </Application>

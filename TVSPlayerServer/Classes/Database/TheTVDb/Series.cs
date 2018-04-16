@@ -103,6 +103,7 @@ namespace TVSPlayerServer
                 Series s = new Series();
                 s.SeriesName = jObject["name"].ToString();
                 string test = jObject["externals"]["thetvdb"].ToString();
+                s.FirstAired = jObject["premiered"] != null ? jObject["premiered"].ToString() : "";
                 s.Id = Int32.Parse(test);
                 s.TvmazeId = Int32.Parse(jObject["id"].ToString());
                 return s;

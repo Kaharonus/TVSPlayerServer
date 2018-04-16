@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
+using Avalonia.Input;
 
 namespace TVSPlayerServer.Views.Setup
 {
@@ -44,12 +45,12 @@ namespace TVSPlayerServer.Views.Setup
             FinishButton = (Button)nameScope.Find("FinishButton");
             Logo = (Image)nameScope.Find("Logo");
 
-            Logo.Source = new Bitmap("Images/logo.png");
-            DirectoryInput.DoubleTapped += Handler;
-            DownloadInput.DoubleTapped += Handler;
-            ExtraInput1.DoubleTapped += Handler;
-            ExtraInput2.DoubleTapped += Handler;
-            ExtraInput3.DoubleTapped += Handler;
+            Logo.Source = new Bitmap("Images/Logo.png");
+            DirectoryInput.PointerReleased += Handler;
+            DownloadInput.PointerReleased += Handler;
+            ExtraInput1.PointerReleased += Handler;
+            ExtraInput2.PointerReleased += Handler;
+            ExtraInput3.PointerReleased += Handler;
             ImportButton.Click += ImportHandler;
             FinishButton.Click += FinishHandler;
         }
@@ -104,11 +105,13 @@ namespace TVSPlayerServer.Views.Setup
             return true;
         }
 
-        private async void Handler(object sender, RoutedEventArgs e) {
-            OpenFolderDialog dia = new OpenFolderDialog();
-            var result = await dia.ShowAsync();
-            if (!string.IsNullOrEmpty(result)) {
-                ((TextBox)sender).Text = result;
+        private async void Handler(object sender, PointerReleasedEventArgs e) {
+            if (e.MouseButton == MouseButton.Right) { 
+                OpenFolderDialog dia = new OpenFolderDialog();
+                var result = await dia.ShowAsync();
+                if (!string.IsNullOrEmpty(result)) {
+                    ((TextBox)sender).Text = result;
+                }
             }
         }
 

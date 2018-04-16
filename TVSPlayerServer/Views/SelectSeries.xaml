@@ -1,0 +1,9 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Design.Height="480" Design.Width="800">
+  <Grid RowDefinitions="1*,4*,1*" ColumnDefinitions="1*,4*,1*" Background="#AA000000">
+    <Grid Background="#333333" Grid.Row="1" Grid.Column="1" RowDefinitions="50,1*,40">
+      
+    </Grid>
+  </Grid>
+
+</UserControl>

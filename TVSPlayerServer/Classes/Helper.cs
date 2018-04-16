@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Net.Sockets;
+using System.Globalization;
 
 namespace TVSPlayerServer
 {
@@ -46,7 +47,7 @@ namespace TVSPlayerServer
 
         public static string ReplaceIgnoreCase(this string Source, string Pattern, string Replacement) {// using \\$ in the pattern will screw this regex up
                                                                                                         //return Regex.Replace(Source, Pattern, Replacement, RegexOptions.IgnoreCase);
-
+                                                                                                    
             if (Regex.IsMatch(Source, Pattern, RegexOptions.IgnoreCase))
                 Source = Regex.Replace(Source, Pattern, Replacement, RegexOptions.IgnoreCase);
             return Source;
@@ -54,6 +55,26 @@ namespace TVSPlayerServer
 
     }
     public static class Helper {
+
+        public static DateTime? ParseDate(string date) {
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result)) {
+                return result;
+            } else {
+                return null;
+            }
+        }
+
+        public static string DateTimeToString(DateTime dt) {
+            return dt.ToString("dd. MM. yyyy");
+        }
+
+        public static string FormatDate(string date) {
+            var dt = ParseDate(date);
+            if (dt != null) {
+                return DateTimeToString((DateTime)dt);
+            }
+            return "";
+        }
 
 
         public static string GetMyIP() {

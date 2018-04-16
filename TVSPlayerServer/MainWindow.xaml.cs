@@ -30,7 +30,7 @@ namespace TVSPlayerServer
             new View((Grid)nameScope.Find("SwitchableContent"), (Grid)nameScope.Find("ContentOnTop"));
             new ConsoleLog((StackPanel)nameScope.Find("ConsoleLog"), (ScrollViewer)nameScope.Find("Scroll"));
             View.SetView(new Administration());
-            if (Settings.SetupComplete) {
+            if (!Settings.SetupComplete) {
                 View.AddView(new Welcome());
             }
         }
