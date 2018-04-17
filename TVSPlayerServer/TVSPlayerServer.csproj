@@ -25,6 +25,7 @@
     <None Remove="Views\ImportResult.xaml" />
     <None Remove="Views\MessageBox.xaml" />
     <None Remove="Views\SelectSeries.xaml" />
+    <None Remove="Views\SelectSeriesResult.xaml" />
     <None Remove="Views\Setup\ImportDatabase.xaml" />
     <None Remove="Views\Setup\Welcome.xaml" />
     <None Remove="Views\Torrents.xaml" />
@@ -75,6 +76,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SelectSeries.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SelectSeriesResult.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Setup\ImportResult.xaml">

@@ -54,6 +54,9 @@ namespace TVSPlayerServer.Views.Setup {
                                     await Anim.FadeOut(result);
                                     ResultPanel.Children.Remove(result);
                                 };
+                                result.Edit.Click += async (s, ev) => {
+                                    var res = await SelectSeries.Show();
+                                };
                                 ResultPanel.Children.Add(result);
                                 Anim.FadeIn(result);
                             });

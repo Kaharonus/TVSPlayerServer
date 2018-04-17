@@ -45,7 +45,7 @@ namespace TVSPlayerServer.Views.Setup
             FinishButton = (Button)nameScope.Find("FinishButton");
             Logo = (Image)nameScope.Find("Logo");
 
-            Logo.Source = new Bitmap("Images/Logo.png");
+            Logo.Source = new Bitmap("Images/logo.png");
             DirectoryInput.PointerReleased += Handler;
             DownloadInput.PointerReleased += Handler;
             ExtraInput1.PointerReleased += Handler;
