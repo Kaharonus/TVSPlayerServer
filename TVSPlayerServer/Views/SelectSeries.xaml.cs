@@ -18,21 +18,6 @@ namespace TVSPlayerServer.Views
         TextBox ImportInput;
         StackPanel ResultPanel;
         INameScope nameScope;
-
-
-        public async static Task<Series> Show() {
-            View.AddView(new SelectSeries());
-            await Task.Run( async() => {
-                while (result == null) {
-                    await Task.Delay(100);
-                }
-            });
-            var res = result;
-            result = null;
-            View.RemoveView();
-            return res;
-        }
-
         static Series result = null;
 
 
@@ -42,6 +27,20 @@ namespace TVSPlayerServer.Views
             ResultPanel = (StackPanel)nameScope.Find("ResultPanel");
             ImportInput = (TextBox)nameScope.Find("ImportInput");
             ImportInput.TextInput += (s, ev) => Search();
+        }
+
+
+        public async static Task<Series> Show() {
+            View.AddView(new SelectSeries());
+            await Task.Run(async () => {
+                while (result == null) {
+                    await Task.Delay(100);
+                }
+            });
+            var res = result;
+            result = null;
+            View.RemoveView();
+            return res;
         }
 
         private async void Search() {
@@ -60,9 +59,12 @@ namespace TVSPlayerServer.Views
                 if (list.Where(y => oldList.Any(z => z.Id == y.Id)).ToList().Count == 0) {
                     oldList = list;
                     Dispatcher.UIThread.Post(() => ResultPanel.Children.Clear(), DispatcherPriority.Send);
-                    foreach (Series sh in list) {
+                    foreach (var series in list) {
                         Dispatcher.UIThread.Post(new Action(() => {
-                            SelectSeriesResult ssr = new SelectSeriesResult(sh);
+                            SelectSeriesResult ssr = new SelectSeriesResult(series);
+                            ssr.Select.Click += (s, ev) => {
+                                result = ssr.Series;
+                            };
                             ResultPanel.Children.Add(ssr);
                             Anim.FadeIn(ssr);
                         }), DispatcherPriority.Send);

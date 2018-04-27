@@ -6,6 +6,7 @@
         <StyleInclude Source="resm:TVSPlayerServer.Themes.ScrollBar.xaml?assembly=TVSPlayerServer"/>
         <StyleInclude Source="resm:TVSPlayerServer.Themes.ScrollViewer.xaml?assembly=TVSPlayerServer"/>
         <StyleInclude Source="resm:TVSPlayerServer.Themes.Grid.xaml?assembly=TVSPlayerServer"/>
+        <StyleInclude Source="resm:TVSPlayerServer.Themes.Button.xaml?assembly=TVSPlayerServer"/>
 
     </Application.Styles>
 </Application>

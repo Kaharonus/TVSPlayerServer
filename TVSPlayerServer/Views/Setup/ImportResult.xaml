@@ -4,12 +4,12 @@
  >
   <Grid Name="Base" Classes="LightMouseOver">
     <Grid Margin="5" HorizontalAlignment="Left">
-      <TextBlock  Text="{Binding Path=SeriesName}" VerticalAlignment="Top" Foreground="#F5F5F5" FontSize="18" />
+      <TextBlock  Name="SeriesName" VerticalAlignment="Top" Foreground="#F5F5F5" FontSize="18" />
       <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-        <TextBlock Text="Path:" Foreground="#F5F5F5" FontSize="14" />
+        <TextBlock Margin="10,0,0,0" Text="Path:" Foreground="#F5F5F5" FontSize="14" />
         <TextBlock Text="{Binding Path=DirPath}" Foreground="#F5F5F5" FontSize="14" Margin="5,0,0,0" />
         <TextBlock Text="Release date:" Foreground="#F5F5F5" FontSize="14" Margin="20,0,0,0" />
-        <TextBlock  Text="{Binding Path=ReleaseDate}" VerticalAlignment="Center" Foreground="#F5F5F5" FontSize="14" Margin="5,0,0,0" />
+        <TextBlock  Name="ReleaseDate" VerticalAlignment="Center" Foreground="#F5F5F5" FontSize="14" Margin="5,0,0,0" />
       </StackPanel>
     </Grid>
     <StackPanel Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">

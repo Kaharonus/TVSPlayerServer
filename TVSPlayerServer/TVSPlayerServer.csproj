@@ -20,12 +20,14 @@
   <ItemGroup>
     <None Remove="Configuration.xaml" />
     <None Remove="Info.xaml" />
+    <None Remove="Themes\Button.xaml" />
     <None Remove="Themes\Grid.xaml" />
     <None Remove="Themes\ScrollViewer.xaml" />
     <None Remove="Views\ImportResult.xaml" />
     <None Remove="Views\MessageBox.xaml" />
     <None Remove="Views\SelectSeries.xaml" />
     <None Remove="Views\SelectSeriesResult.xaml" />
+    <None Remove="Views\SeriesDetails.xaml" />
     <None Remove="Views\Setup\ImportDatabase.xaml" />
     <None Remove="Views\Setup\Welcome.xaml" />
     <None Remove="Views\Torrents.xaml" />
@@ -69,6 +71,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Themes\Button.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Themes\Grid.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -78,7 +83,10 @@
     <EmbeddedResource Update="Views\SelectSeries.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SelectSeriesResult.xaml">
+    <EmbeddedResource Update="Views\SeriesDetails.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\UserControls\SelectSeriesResult.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Setup\ImportResult.xaml">

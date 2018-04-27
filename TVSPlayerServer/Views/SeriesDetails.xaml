@@ -1,0 +1,13 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Design.Width="800" Design.Height="480" >
+
+  <Grid RowDefinitions="1*,4*,1*" ColumnDefinitions="1*,4*,1*" Background="#AA000000">
+    <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="*,35" Background="#333333">
+      <Grid Margin="5" Name="ContentGrid">
+        <Image Source="../../../Images/Poster.png" HorizontalAlignment="Left" Width="185"  />
+        
+      </Grid>
+      <Button Margin="0,0,5,5" Grid.Row="1" Width="65" HorizontalAlignment="Right" Content="Return" />
+    </Grid>
+  </Grid>
+</UserControl>
