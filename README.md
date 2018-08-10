@@ -1,4 +1,4 @@
-# TVSPlayerServer
+# TVSPlayerServer (deprecated)
 
 New phase of TVSPlayer that splits existing project to Server/Client implementation. Right now It's far from a working state. 
  
